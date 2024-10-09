@@ -400,7 +400,11 @@ export class NsisTarget extends Target {
         }
       }
     } else {
-      await execWine(installerPath, null, [], { env: { __COMPAT_LAYER: "RunAsInvoker" } })
+      const exists = fs.existsSync(uninstallerPath);
+      if (!exists) {
+        await execWine(installerPath, null, [], { env: { __COMPAT_LAYER: "RunAsInvoker" } })
+        process.exit(0);
+      }
     }
     await packager.sign(uninstallerPath)
 
